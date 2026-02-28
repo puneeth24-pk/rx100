@@ -31,6 +31,7 @@ function App() {
     const [deferredPrompt, setDeferredPrompt] = useState(null);
     const [databaseSnapshot, setDatabaseSnapshot] = useState({ orders: [], inventory: [] });
     const [isEmailServiceLive, setIsEmailServiceLive] = useState(false);
+    const [apiStatus, setApiStatus] = useState("checking"); // checking, connected, failed
 
     const recognitionRef = useRef(null);
     const scrollRef = useRef(null);
@@ -78,11 +79,24 @@ function App() {
         if (user) {
             fetchDashboardData();
             checkEmailServiceStatus();
+            checkApiHealth();
             if (activeTab === "database") {
                 fetchDatabaseSnapshot();
             }
+        } else {
+            checkApiHealth();
         }
     }, [user, activeTab]);
+
+    const checkApiHealth = async () => {
+        try {
+            const res = await fetch(`${API_BASE}/health/email`);
+            if (res.ok) setApiStatus("connected");
+            else setApiStatus("failed");
+        } catch (err) {
+            setApiStatus("failed");
+        }
+    };
 
     const checkEmailServiceStatus = async () => {
         try {
@@ -333,7 +347,15 @@ function App() {
             {/* Sidebar */}
             <aside style={{ width: '280px', display: 'flex', flexDirection: 'column', gap: '15px' }}>
                 <div style={{ padding: '10px 10px 20px 10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <h1 style={{ fontSize: '1.5rem', margin: 0, color: 'var(--primary)', fontWeight: '800' }}>RxGenie</h1>
+                    <div>
+                        <h1 style={{ fontSize: '1.5rem', margin: 0, color: 'var(--primary)', fontWeight: '800' }}>RxGenie</h1>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '5px', marginTop: '2px' }}>
+                            <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: apiStatus === "connected" ? "#10b981" : (apiStatus === "failed" ? "#ef4444" : "#f59e0b") }}></div>
+                            <span style={{ fontSize: '0.6rem', color: 'var(--text-muted)', fontWeight: '600', textTransform: 'uppercase' }}>
+                                API {apiStatus}
+                            </span>
+                        </div>
+                    </div>
                     {user && (
                         <button
                             type="button"
