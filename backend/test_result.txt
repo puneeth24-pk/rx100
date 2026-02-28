@@ -1,0 +1,44 @@
+﻿============================================================
+  RxGenie Full System Test
+============================================================
+
+[1] REGISTER new user...
+python : Traceback (most 
+recent call last):
+At line:1 char:1
++ python full_test.py 2>&1 | 
+Out-File -FilePath 
+test_result.txt -Encodi ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo           
+   : NotSpecified: (Traceba  
+  ck (most recent call las   
+ t)::String) [], RemoteEx    
+ception
+    + FullyQualifiedErrorId  
+   : NativeCommandError
+ 
+  File "C:\Users\mandl\Downlo
+ads\Transfer\backend\full_tes
+t.py", line 19, in <module>
+    print(f"  \u2705 
+Registered! patient_id = 
+{user['patient_id']}")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^
+  File "C:\Users\mandl\AppDat
+a\Local\Python\pythoncore-3.1
+4-64\Lib\encodings\cp1252.py"
+, line 19, in encode
+    return codecs.charmap_enc
+ode(input,self.errors,encodin
+g_table)[0]
+           ~~~~~~~~~~~~~~~~~~
+~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^
+UnicodeEncodeError: 
+'charmap' codec can't encode 
+character '\u2705' in 
+position 2: character maps 
+to <undefined>

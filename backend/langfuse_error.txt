@@ -1,0 +1,50 @@
+Traceback (most recent call last):
+  File "C:\Users\mandl\Downloads\Transfer\backend\test_langfuse.py", line 4, in <module>
+    import langfuse
+  File "C:\Users\mandl\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\langfuse\__init__.py", line 3, in <module>
+    from langfuse.batch_evaluation import (
+    ...<6 lines>...
+    )
+  File "C:\Users\mandl\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\langfuse\batch_evaluation.py", line 27, in <module>
+    from langfuse.api.resources.commons.types import (
+    ...<2 lines>...
+    )
+  File "C:\Users\mandl\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\langfuse\api\__init__.py", line 3, in <module>
+    from .resources import (
+    ...<258 lines>...
+    )
+  File "C:\Users\mandl\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\langfuse\api\resources\__init__.py", line 3, in <module>
+    from . import (
+    ...<28 lines>...
+    )
+  File "C:\Users\mandl\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\langfuse\api\resources\annotation_queues\__init__.py", line 3, in <module>
+    from .types import (
+    ...<13 lines>...
+    )
+  File "C:\Users\mandl\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\langfuse\api\resources\annotation_queues\types\__init__.py", line 3, in <module>
+    from .annotation_queue import AnnotationQueue
+  File "C:\Users\mandl\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\langfuse\api\resources\annotation_queues\types\annotation_queue.py", line 10, in <module>
+    class AnnotationQueue(pydantic_v1.BaseModel):
+    ...<38 lines>...
+            json_encoders = {dt.datetime: serialize_datetime}
+  File "C:\Users\mandl\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\pydantic\v1\main.py", line 221, in __new__
+    inferred = ModelField.infer(
+        name=var_name,
+    ...<3 lines>...
+        config=config,
+    )
+  File "C:\Users\mandl\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\pydantic\v1\fields.py", line 504, in infer
+    return cls(
+        name=name,
+    ...<7 lines>...
+        field_info=field_info,
+    )
+  File "C:\Users\mandl\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\pydantic\v1\fields.py", line 434, in __init__
+    self.prepare()
+    ~~~~~~~~~~~~^^
+  File "C:\Users\mandl\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\pydantic\v1\fields.py", line 544, in prepare
+    self._set_default_and_type()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\mandl\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\pydantic\v1\fields.py", line 576, in _set_default_and_type
+    raise errors_.ConfigError(f'unable to infer type for attribute "{self.name}"')
+pydantic.v1.errors.ConfigError: unable to infer type for attribute "description"

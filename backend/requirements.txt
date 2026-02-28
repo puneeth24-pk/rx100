@@ -1,0 +1,7 @@
+fastapi==0.115.11
+uvicorn==0.34.0
+pymongo==4.11.1
+groq==0.13.1
+python-dotenv==1.0.1
+langsmith==0.3.11
+pydantic==2.10.6

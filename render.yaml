@@ -1,0 +1,26 @@
+services:
+  # Backend FastAPI Service
+  - type: web
+    name: rxgenie-api
+    env: python
+    region: oregon 
+    buildCommand: "cd backend && pip install -r requirements.txt"
+    startCommand: "cd backend && python k.py"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10.12
+      # SECRETS (MONGO_URL, GROQ_API_KEY, LANGSMITH_API_KEY) must be added manually in the Render Dashboard!
+      
+  # Frontend React Vite Service
+  - type: web
+    name: rxgenie-web
+    env: static
+    region: oregon
+    buildCommand: "cd frontend && npm install && npm run build"
+    staticPublishPath: "./frontend/dist"
+    envVars:
+      - key: VITE_API_BASE_URL
+        fromService:
+          type: web
+          name: rxgenie-api
+          envVarKey: RENDER_EXTERNAL_URL

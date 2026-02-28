@@ -1,0 +1,192 @@
+python : C:\Users\mandl
+\AppData\Local\Python\p
+ythoncore-3.14-64\Lib\s
+ite-packages\langfuse\a
+pi\core\pydantic_utilit
+ies.py:10: 
+UserWarning: Core 
+Pydantic V1 
+functionality isn't 
+compatible with Python 
+3.14 or greater.
+At line:1 char:1
++ python -c "import 
+sys, traceback; 
+sys.path.append('.'); 
+import k" 2>& ...
++ ~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~
+    + CategoryInfo     
+         : NotSpecifi  
+  ed: (C:\Users\mand   
+ l\....14 or greate    
+r.:String) [], Rem    
+oteException
+    + FullyQualifiedEr 
+   rorId : NativeComm  
+  andError
+ 
+  import pydantic.v1 
+as pydantic_v1  # 
+type: ignore  # 
+nopycln: import
+Traceback (most recent 
+call last):
+  File "<string>", 
+line 1, in <module>
+    import sys, 
+traceback; 
+sys.path.append('.'); 
+import k
+                       
+                       
+   ^^^^^^^^
+  File "C:\Users\mandl\
+Downloads\Transfer\back
+end\k.py", line 9, in 
+<module>
+    from agents import 
+Orchestrator
+  File "C:\Users\mandl\
+Downloads\Transfer\back
+end\agents.py", line 
+9, in <module>
+    from langfuse 
+import Langfuse
+  File "C:\Users\mandl\
+AppData\Local\Python\py
+thoncore-3.14-64\Lib\si
+te-packages\langfuse\__
+init__.py", line 3, in 
+<module>
+    from langfuse.batch
+_evaluation import (
+    ...<6 lines>...
+    )
+  File "C:\Users\mandl\
+AppData\Local\Python\py
+thoncore-3.14-64\Lib\si
+te-packages\langfuse\ba
+tch_evaluation.py", 
+line 27, in <module>
+    from langfuse.api.r
+esources.commons.types 
+import (
+    ...<2 lines>...
+    )
+  File "C:\Users\mandl\
+AppData\Local\Python\py
+thoncore-3.14-64\Lib\si
+te-packages\langfuse\ap
+i\__init__.py", line 
+3, in <module>
+    from .resources 
+import (
+    ...<258 lines>...
+    )
+  File "C:\Users\mandl\
+AppData\Local\Python\py
+thoncore-3.14-64\Lib\si
+te-packages\langfuse\ap
+i\resources\__init__.py
+", line 3, in <module>
+    from . import (
+    ...<28 lines>...
+    )
+  File "C:\Users\mandl\
+AppData\Local\Python\py
+thoncore-3.14-64\Lib\si
+te-packages\langfuse\ap
+i\resources\annotation_
+queues\__init__.py", 
+line 3, in <module>
+    from .types import 
+(
+    ...<13 lines>...
+    )
+  File "C:\Users\mandl\
+AppData\Local\Python\py
+thoncore-3.14-64\Lib\si
+te-packages\langfuse\ap
+i\resources\annotation_
+queues\types\__init__.p
+y", line 3, in <module>
+    from 
+.annotation_queue 
+import AnnotationQueue
+  File "C:\Users\mandl\
+AppData\Local\Python\py
+thoncore-3.14-64\Lib\si
+te-packages\langfuse\ap
+i\resources\annotation_
+queues\types\annotation
+_queue.py", line 10, 
+in <module>
+    class AnnotationQue
+ue(pydantic_v1.BaseMode
+l):
+    ...<38 lines>...
+            
+json_encoders = 
+{dt.datetime: 
+serialize_datetime}
+  File "C:\Users\mandl\
+AppData\Local\Python\py
+thoncore-3.14-64\Lib\si
+te-packages\pydantic\v1
+\main.py", line 221, 
+in __new__
+    inferred = 
+ModelField.infer(
+        name=var_name,
+    ...<3 lines>...
+        config=config,
+    )
+  File "C:\Users\mandl\
+AppData\Local\Python\py
+thoncore-3.14-64\Lib\si
+te-packages\pydantic\v1
+\fields.py", line 504, 
+in infer
+    return cls(
+        name=name,
+    ...<7 lines>...
+        
+field_info=field_info,
+    )
+  File "C:\Users\mandl\
+AppData\Local\Python\py
+thoncore-3.14-64\Lib\si
+te-packages\pydantic\v1
+\fields.py", line 434, 
+in __init__
+    self.prepare()
+    ~~~~~~~~~~~~^^
+  File "C:\Users\mandl\
+AppData\Local\Python\py
+thoncore-3.14-64\Lib\si
+te-packages\pydantic\v1
+\fields.py", line 544, 
+in prepare
+    self._set_default_a
+nd_type()
+    ~~~~~~~~~~~~~~~~~~~
+~~~~~~~^^
+  File "C:\Users\mandl\
+AppData\Local\Python\py
+thoncore-3.14-64\Lib\si
+te-packages\pydantic\v1
+\fields.py", line 576, 
+in 
+_set_default_and_type
+    raise errors_.Confi
+gError(f'unable to 
+infer type for 
+attribute 
+"{self.name}"')
+pydantic.v1.errors.Conf
+igError: unable to 
+infer type for 
+attribute "description"

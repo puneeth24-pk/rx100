@@ -1,0 +1,36 @@
+﻿
+=== DB: hackathon | Collections: ['users']
+   users: 1 docs
+   Sample keys: ['_id', 'username', 'password', 'patient_id']
+
+=== DB: hackathon_db | Collections: ['users', 'agent_traces', 'connected_orders', 'dataset2', 'dataset1']
+   users: 4 docs
+   Sample keys: ['_id', 'username', 'password', 'patient_id']
+   agent_traces: 39 docs
+   Sample keys: ['_id', 'session_id', 'agent_name', 'timestamp', 'input', 'reasoning', 'decision', 'output']
+   connected_orders: 50 docs
+   Sample keys: ['_id', 'patient', 'purchase_date', 'product', 'quantity', 'total_price', 'dosage_frequency']
+   dataset2: 52 docs
+   Sample keys: ['_id', 'product id', 'product name', 'pzn', 'price rec', 'package size', 'descriptions', 'prescription_required', 'stock']
+   dataset1: 51 docs
+   Sample keys: ['_id', 'Patient ID', 'Patient Age', 'Patient Gender', 'Purchase Date', 'Product Name', 'Quantity', 'Total Price (EUR)', 'Dosage Frequency']
+
+=== DB: sample_mflix | Collections: ['embedded_movies', 'users', 'comments', 'movies', 'theaters', 'sessions']
+   embedded_movies: 3483 docs
+   Sample keys: ['_id', 'plot', 'genres', 'runtime', 'rated', 'cast', 'num_mflix_comments', 'poster', 'title', 'fullplot', 'languages', 'released', 'directors', 'writers', 'awards', 'lastupdated', 'year', 'imdb', 'countries', 'type', 'tomatoes', 'plot_embedding', 'plot_embedding_voyage_3_large']
+   users: 185 docs
+   Sample keys: ['_id', 'name', 'email', 'password']
+   comments: 41079 docs
+   Sample keys: ['_id', 'name', 'email', 'movie_id', 'text', 'date']
+   movies: 21349 docs
+   Sample keys: ['_id', 'plot', 'genres', 'runtime', 'cast', 'poster', 'title', 'fullplot', 'languages', 'released', 'directors', 'rated', 'awards', 'lastupdated', 'year', 'imdb', 'countries', 'type', 'tomatoes', 'num_mflix_comments']
+   theaters: 1564 docs
+   Sample keys: ['_id', 'theaterId', 'location']
+   sessions: 1 docs
+   Sample keys: ['_id', 'user_id', 'jwt']
+
+=== DB: admin | Collections: []
+
+=== DB: local | Collections: ['oplog.rs']
+   oplog.rs: 173 docs
+   Sample keys: ['op', 'ns', 'ui', 'o', 'ts', 't', 'v', 'wall']
