@@ -107,7 +107,7 @@ async def update_email(request: Dict[str, str]):
         raise HTTPException(status_code=400, detail="Missing username or email")
     
     res = users_col.update_one({"username": username}, {"$set": {"email": new_email}})
-    if res.modified_count == 0:
+    if res.matched_count == 0:
         raise HTTPException(status_code=404, detail="User not found")
         
     return {"message": "Email updated successfully"}
