@@ -108,16 +108,30 @@ class SafetyAgent(BaseAgent):
                         product = item
                         break
             
-            # Symptom Fallback Logic
+            # Symptom Fallback Logic: Ask LLM to pick the best product for the symptom
             if not product and symptom:
-                print(f"DEBUG: Searching for symptoms matching '{symptom}'...")
-                for item in inventory_col.find():
-                    desc = item.get("medication description", "").lower()
-                    if symptom.lower() in desc:
-                        product = item
-                        medicine_name = item.get("product name")
-                        print(f"DEBUG: Found diagnostic match: {medicine_name}")
-                        break
+                print(f"DEBUG: Using Expert LLM to match symptom '{symptom}' to inventory...")
+                # Fetch a sample of inventory to help the LLM decide
+                sample_products = list(inventory_col.find({}, {"product name": 1, "medication description": 1, "indications": 1}).limit(20))
+                
+                prompt = f"""
+                As an Expert Pharmacist, match the user's symptom to the best medicine in our inventory.
+                Symptom: "{symptom}"
+                Available Products: {json.dumps(sample_products, default=str)}
+                
+                Return ONLY the exact "product name" of the best match, or "None" if no good match exists.
+                """
+                completion = groq_client.chat.completions.create(
+                    model="llama-3.1-8b-instant",
+                    messages=[{"role": "user", "content": prompt}]
+                )
+                match_name = completion.choices[0].message.content.strip().strip('"')
+                
+                if match_name and match_name != "None":
+                    product = inventory_col.find_one({"product name": match_name})
+                    if product:
+                        medicine_name = match_name
+                        print(f"DEBUG: LLM Found diagnostic match: {medicine_name}")
 
             if not medicine_name and not product:
                  return {"approved": False, "reason": "I couldn't identify a specific medicine. Could you please tell me which one you usually take, or describe your symptoms more specifically?", "procurement_available": False}

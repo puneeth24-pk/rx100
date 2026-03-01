@@ -1,5 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from pymongo import MongoClient
 from bson import ObjectId
 from pydantic import BaseModel
@@ -204,6 +206,22 @@ def update_order(id: str, updated_data: Order):
         {"$set": updated_data.dict()}
     )
     return {"message": "Order updated successfully"}
+
+# Serve Static Files (Frontend)
+# Ensure the path is correct relative to where k.py is run (usually from root)
+frontend_path = os.path.join(os.path.dirname(__file__), "..", "frontend", "dist")
+
+if os.path.exists(frontend_path):
+    app.mount("/assets", StaticFiles(directory=os.path.join(frontend_path, "assets")), name="assets")
+
+    @app.get("/{full_path:path}")
+    async def serve_frontend(full_path: str):
+        # If the path looks like an API call, let it through (though this catch-all is last)
+        if full_path.startswith("auth") or full_path.startswith("chat") or full_path.startswith("admin") or full_path.startswith("orders") or full_path.startswith("health"):
+             raise HTTPException(status_code=404)
+             
+        index_path = os.path.join(frontend_path, "index.html")
+        return FileResponse(index_path)
 
 if __name__ == "__main__":
     import uvicorn
