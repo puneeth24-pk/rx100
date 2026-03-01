@@ -197,7 +197,7 @@ class RefillAgent(BaseAgent):
         
         alerts = []
         if not history:
-            self.log_trace(session_id, patient_id, "No past orders found for this user.", "Skipped Analysis", alerts)
+            self.log_trace(session_id, patient_id, patient_id, "No past orders found for this user.", "Skipped Analysis", [])
             return alerts
 
         for order in history:
