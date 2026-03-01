@@ -304,6 +304,16 @@ function App() {
                         <p style={{ color: 'var(--text-muted)', marginBottom: '30px' }}>
                             {authMode === "login" ? "Welcome back! Please login." : "Create your account to get started."}
                         </p>
+                        <div style={{ fontSize: '0.65rem', color: '#64748b', marginBottom: '15px', background: '#f8fafc', padding: '10px', borderRadius: '8px', border: '1px solid #e2e8f0', textAlign: 'left' }}>
+                            <div style={{ fontWeight: 'bold', marginBottom: '4px' }}>Deployment Debugger:</div>
+                            <div>• Origin: <code>{window.location.origin}</code></div>
+                            <div>• API Base: <code>{API_BASE || "(relative / local)"}</code></div>
+                            {(!API_BASE && window.location.hostname.includes('onrender.com')) && (
+                                <div style={{ color: '#ef4444', marginTop: '4px', fontWeight: '600' }}>
+                                    ⚠️ VITE_API_BASE_URL is MISSING in Render Build!
+                                </div>
+                            )}
+                        </div>
                         <form onSubmit={handleAuth} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
                             <input
                                 type="text"

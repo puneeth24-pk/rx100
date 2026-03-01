@@ -178,6 +178,16 @@ async def get_database_snapshot():
         
     return {"orders": ords, "inventory": inv}
 
+@app.get("/health/db")
+async def health_db():
+    try:
+        if client is None:
+             return {"status": "error", "reason": "MongoClient not initialized (check MONGO_URL ENV)"}
+        client.admin.command('ping')
+        return {"status": "connected", "database": DB_NAME}
+    except Exception as e:
+        return {"status": "error", "reason": str(e)}
+
 @app.get("/health/email")
 async def health_email():
     smtp_server = os.getenv("SMTP_SERVER")
