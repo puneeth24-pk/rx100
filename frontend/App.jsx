@@ -172,7 +172,7 @@ function App() {
         try {
             const [ordersRes, tracesRes, stockRes, refillsRes] = await Promise.all([
                 fetch(`${API_BASE}/orders?patient_id=${user.patient_id}`).catch(() => ({ json: () => [] })),
-                fetch(`${API_BASE}/admin/traces`).catch(() => ({ json: () => [] })),
+                fetch(`${API_BASE}/admin/traces?patient_id=${user.patient_id}`).catch(() => ({ json: () => [] })),
                 fetch(`${API_BASE}/admin/low-stock`).catch(() => ({ json: () => [] })),
                 fetch(`${API_BASE}/admin/refills?patient_id=${user.patient_id}`).catch(() => ({ json: () => [] }))
             ]);

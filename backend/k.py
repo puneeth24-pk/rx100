@@ -136,8 +136,11 @@ async def chat_order(request: ChatOrderRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/admin/traces")
-async def get_traces(limit: int = 10):
-    traces = list(traces_col.find().sort("timestamp", -1).limit(limit))
+async def get_traces(patient_id: Optional[str] = None, limit: int = 10):
+    query = {}
+    if patient_id:
+        query = {"patient_id": patient_id}
+    traces = list(traces_col.find(query).sort("timestamp", -1).limit(limit))
     for t in traces:
         t["_id"] = str(t["_id"])
     return traces

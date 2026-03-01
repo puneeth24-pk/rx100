@@ -27,9 +27,10 @@ class BaseAgent:
     def __init__(self, name: str):
         self.agent_name = name
 
-    def log_trace(self, session_id: str, input_data: Any, reasoning: str, decision: str, output_data: Any):
+    def log_trace(self, session_id: str, patient_id: str, input_data: Any, reasoning: str, decision: str, output_data: Any):
         trace_doc = {
             "session_id": session_id,
+            "patient_id": patient_id,
             "agent_name": self.agent_name,
             "timestamp": datetime.datetime.utcnow(),
             "input": input_data,
@@ -38,7 +39,7 @@ class BaseAgent:
             "output": output_data
         }
         traces_col.insert_one(trace_doc)
-        print(f"[{self.agent_name}] {reasoning} -> {decision}")
+        print(f"[{self.agent_name}]({patient_id}) {reasoning} -> {decision}")
         return trace_doc
 
 class OrderingAgent(BaseAgent):
@@ -46,7 +47,7 @@ class OrderingAgent(BaseAgent):
         super().__init__("Conversational Ordering Agent")
 
     @traceable(name="OrderingAgent")
-    def run(self, session_id: str, text: str) -> Dict[str, Any]:
+    def run(self, session_id: str, patient_id: str, text: str) -> Dict[str, Any]:
         prompt = f"""
         You are a Pharmacy Ordering AI. The user might speak in English, Hindi, Telugu, or a mix of these.
         Extract order details from the user's text.
@@ -87,7 +88,7 @@ class OrderingAgent(BaseAgent):
             else:
                 output = {"medicine_name": None, "quantity": 1, "dosage_frequency": "As directed"}
 
-        self.log_trace(session_id, text, "Extracted structured data from natural text using Llama 3.3.", "Extracted", output)
+        self.log_trace(session_id, patient_id, text, "Extracted structured data from natural text using Llama 3.3.", "Extracted", output)
         return output
 
 class SafetyAgent(BaseAgent):
@@ -95,7 +96,7 @@ class SafetyAgent(BaseAgent):
         super().__init__("Safety & Policy Agent")
 
     @traceable(name="SafetyAgent")
-    def run(self, session_id: str, order_data: Dict[str, Any], prescription_data: Optional[str] = None) -> Dict[str, Any]:
+    def run(self, session_id: str, patient_id: str, order_data: Dict[str, Any], prescription_data: Optional[str] = None) -> Dict[str, Any]:
         try:
             medicine_name = order_data.get("medicine_name")
             symptom = order_data.get("symptom")
@@ -182,7 +183,7 @@ class SafetyAgent(BaseAgent):
             result = {"approved": False, "reason": "Expert suggestion: Not found in inventory.", "procurement_available": True}
             reasoning = "Fallback due to system error"
             
-        self.log_trace(session_id, {"order": order_data, "prescription": prescription_data}, reasoning, "Decision Made", result)
+        self.log_trace(session_id, patient_id, {"order": order_data, "prescription": prescription_data}, reasoning, "Decision Made", result)
         return result
 
 class RefillAgent(BaseAgent):
@@ -227,7 +228,7 @@ class RefillAgent(BaseAgent):
                     "reason": f"Proactive check: {analysis['reason']}"
                 })
         
-        self.log_trace(session_id, patient_id, f"Expert Refill Analysis: Found {len(alerts)} items requiring attention soon.", "Analysis Complete", alerts)
+        self.log_trace(session_id, patient_id, patient_id, f"Expert Refill Analysis: Found {len(alerts)} items requiring attention soon.", "Analysis Complete", alerts)
         
         if alerts:
             # Check if user has an email on file
@@ -279,7 +280,7 @@ class ActionAgent(BaseAgent):
         webhook_res = {"status": "success", "webhook_url": "https://webhook.site/mock-pharmacy-action"}
         
         result = {"status": "Order Processed", "order_id": str(merged_doc.get("_id"))}
-        self.log_trace(session_id, order_data, "Executed DB updates and triggered webhook.", "Success", result)
+        self.log_trace(session_id, patient_id, order_data, "Executed DB updates and triggered webhook.", "Success", result)
         return result
 
 class Orchestrator:
@@ -293,10 +294,10 @@ class Orchestrator:
     def process_chat_order(self, session_id: str, patient_id: str, text: str, prescription_data: Optional[str] = None) -> Dict[str, Any]:
         try:
             # 1. Extraction
-            order_details = self.ordering.run(session_id, text)
+            order_details = self.ordering.run(session_id, patient_id, text)
             
             # 2. Safety & Policy
-            safety_result = self.safety.run(session_id, order_details, prescription_data)
+            safety_result = self.safety.run(session_id, patient_id, order_details, prescription_data)
             
             # 1.5 Fetch traces safely
             try:
