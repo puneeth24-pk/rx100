@@ -25,12 +25,21 @@ app.add_middleware(
 MONGO_URL = os.getenv("MONGO_URL")
 DB_NAME = os.getenv("DB_NAME", "hackathon_db")
 
-client = MongoClient(MONGO_URL)
-db = client[DB_NAME]
-orders_col = db["connected_orders"]
-inventory_col = db["dataset2"]
-traces_col = db["agent_traces"]
-users_col = db["users"]
+try:
+    client = MongoClient(MONGO_URL, serverSelectionTimeoutMS=5000)
+    # Trigger a connection check
+    client.admin.command('ping')
+    print("✅ Successfully connected to MongoDB")
+except Exception as e:
+    print(f"❌ MongoDB Connection Error: {e}")
+    print(f"Check if MONGO_URL is set correctly in Render/local .env")
+    client = None
+
+db = client[DB_NAME] if client else None
+orders_col = db["connected_orders"] if db is not None else None
+inventory_col = db["dataset2"] if db is not None else None
+traces_col = db["agent_traces"] if db is not None else None
+users_col = db["users"] if db is not None else None
 
 orchestrator = Orchestrator()
 
