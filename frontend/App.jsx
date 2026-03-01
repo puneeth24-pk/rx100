@@ -19,6 +19,7 @@ function App() {
     const [orders, setOrders] = useState([]);
     const [traces, setTraces] = useState([]);
     const [lowStock, setLowStock] = useState([]);
+    const [refillAlerts, setRefillAlerts] = useState([]);
     const [messages, setMessages] = useState([
         { role: "assistant", content: "👋 Welcome to RxGenie AI. I'm your premium digital pharmacist. How can I assist you with your health today?" }
     ]);
@@ -169,19 +170,22 @@ function App() {
     const fetchDashboardData = async () => {
         if (!user) return;
         try {
-            const [ordersRes, tracesRes, stockRes] = await Promise.all([
+            const [ordersRes, tracesRes, stockRes, refillsRes] = await Promise.all([
                 fetch(`${API_BASE}/orders?patient_id=${user.patient_id}`).catch(() => ({ json: () => [] })),
                 fetch(`${API_BASE}/admin/traces`).catch(() => ({ json: () => [] })),
-                fetch(`${API_BASE}/admin/low-stock`).catch(() => ({ json: () => [] }))
+                fetch(`${API_BASE}/admin/low-stock`).catch(() => ({ json: () => [] })),
+                fetch(`${API_BASE}/admin/refills?patient_id=${user.patient_id}`).catch(() => ({ json: () => [] }))
             ]);
 
             const ordersData = typeof ordersRes.json === 'function' ? await ordersRes.json() : [];
             const tracesData = typeof tracesRes.json === 'function' ? await tracesRes.json() : [];
             const stockData = typeof stockRes.json === 'function' ? await stockRes.json() : [];
+            const refillsData = typeof refillsRes.json === 'function' ? await refillsRes.json() : [];
 
             setOrders(Array.isArray(ordersData) ? ordersData : []);
             setTraces(Array.isArray(tracesData) ? tracesData : []);
             setLowStock(Array.isArray(stockData) ? stockData : []);
+            setRefillAlerts(Array.isArray(refillsData) ? refillsData : []);
         } catch (err) {
             console.error("Fetch error", err);
         }
@@ -587,12 +591,30 @@ function App() {
                             </div>
                             <div className="card">
                                 <h3>🔔 Proactive Refill Alerts</h3>
-                                <div style={{ marginTop: '20px' }}>
-                                    <div style={{ padding: '15px', background: '#fffbeb', border: '1px solid #fef3c7', borderRadius: '12px', color: '#92400e' }}>
-                                        <strong>Refill Required: {user?.username}</strong>
-                                        <p style={{ margin: '5px 0', fontSize: '0.9rem' }}>Patient is running low on Paracetamol (Purchased 2024-02-15, Daily dosage).</p>
-                                        <button className="btn" style={{ background: '#059669', marginTop: '10px' }}>Contact Patient</button>
-                                    </div>
+                                <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                                    {refillAlerts.length > 0 ? refillAlerts.map((alert, idx) => (
+                                        <div key={idx} style={{ padding: '15px', background: '#fffbeb', border: '1px solid #fef3c7', borderRadius: '12px', color: '#92400e' }}>
+                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                                <strong>Refill Soon: {alert.medicine}</strong>
+                                                <span className="badge badge-warning" style={{ fontSize: '0.6rem' }}>{alert.days} days left</span>
+                                            </div>
+                                            <p style={{ margin: '5px 0', fontSize: '0.85rem' }}>{alert.reason}</p>
+                                            <button
+                                                className="btn"
+                                                style={{ background: '#059669', marginTop: '10px', width: '100%', fontSize: '0.8rem' }}
+                                                onClick={() => {
+                                                    setInputText(`I need a refill for ${alert.medicine}`);
+                                                    setActiveTab('consultation');
+                                                }}
+                                            >
+                                                Auto-Refill Now
+                                            </button>
+                                        </div>
+                                    )) : (
+                                        <div style={{ textAlign: 'center', padding: '20px', color: 'var(--text-muted)', fontSize: '0.9rem' }}>
+                                            No urgent refill alerts.
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>

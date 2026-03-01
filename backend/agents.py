@@ -37,7 +37,7 @@ class BaseAgent:
             "decision": decision,
             "output": output_data
         }
-        # traces_col.insert_one(trace_doc)
+        traces_col.insert_one(trace_doc)
         print(f"[{self.agent_name}] {reasoning} -> {decision}")
         return trace_doc
 
