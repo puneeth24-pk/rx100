@@ -219,10 +219,16 @@ if os.path.exists(frontend_path):
 
     @app.get("/{full_path:path}")
     async def serve_frontend(full_path: str):
-        # If the path looks like an API call, let it through (though this catch-all is last)
+        # 1. Check if it's an API route (should have been handled, but for safety)
         if full_path.startswith("auth") or full_path.startswith("chat") or full_path.startswith("admin") or full_path.startswith("orders") or full_path.startswith("health"):
              raise HTTPException(status_code=404)
+        
+        # 2. Check if the file exists in the frontend dist directory
+        static_file_path = os.path.join(frontend_path, full_path)
+        if os.path.isfile(static_file_path):
+            return FileResponse(static_file_path)
              
+        # 3. Fallback to index.html for SPA routing
         index_path = os.path.join(frontend_path, "index.html")
         return FileResponse(index_path)
 
